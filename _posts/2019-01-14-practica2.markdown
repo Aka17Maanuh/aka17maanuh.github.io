@@ -1,0 +1,43 @@
+---
+layout: post
+title: 'Practica 2'
+date: 2019-01-11 12:10:00 +0000
+categories: practicas
+---
+# Practica2
+En primer lugar creamos un directorio para nuestra nueva máquina y en la consola escribimos:
+vagrant init
+Despues se creará el archivo vagrantfile, dentro de el pondremos la configuracion de nuestra
+maquina:
+```
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure(2) do |config|
+config.vm.box = "ubuntu/bionic64"
+config.vm.network "private_network", ip: "192.168.33.10"
+config.vm.provision "shell",path: "script.sh"
+end
+```
+Una vez configurada la maquina creamos un archivo llamado script.sh y ponemos los siguientes
+comandos:
+```
+#!/bin/bash
+apt-get update
+sudo apt-get install -y apache2
+cp /vagrant/index.php /var/www/html
+apt -y install debconf-utils
+DB_ROOT_PASSWD=10103k3m3
+debconf-set-selections <<< "mysql-server mysql-server/root_password password
+$DB_ROOT_PASSWD"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password
+$DB_ROOT_PASSWD"
+apt install -y mysql-server
+apt-get install -y php libapache2-mod-php php-mysql
+apt install -y git
+cd /tmp
+git clone https://github.com/josejuansanchez/iaw-practica-lamp.git
+cp /tmp/iaw-practica-lamp/src/. /var/www/html -R
+cd /var/www/html
+chown www-data:www-data * -R
+mysql -u root -p$DB_ROOT_PASSWD < database.sql
+```
