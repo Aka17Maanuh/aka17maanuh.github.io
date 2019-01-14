@@ -1,0 +1,28 @@
+---
+layout: post
+title: 'Practica 10'
+date: 2019-01-11 12:10:00 +0000
+categories: practicas
+---
+# Practica 10
+
+- 1.Accedemos a amazon:
+```
+https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Home:
+```
+- 2.Seleccionamos LAUNCH INSTANCE.
+- 3.Escogemos el SO Ubuntu:
+```
+WORDPRESS POWERED by Bitnami
+```
+- 4.Seleccionamos la que pone free tier(de prueba) y pinchamos en NEXT.
+- 5.En Configure Instance Details no tocamos nada, solo pinchamos en NEXT.
+- 6.En Add Storage tampoco tocamos nada, solo pinchamos en NEXT.
+- 7.En Add tags no tocamos nada, solo pinchamos en NEXT.
+- 8.En Configure Security Groups, configuramos las reglas, para ello le damos a ADD RULE, seleccionamos la funcion que queremos(http, https…) y automaticamente selecciona el puerto a abrir, cuando acabemos pinchamos en Review And Launch y seguidamente pinchamos en LAUNCH.
+- 9.Ahora nos pedirá que demos un nombre al key para conectarnos por ssh, cuando hayamos hecho esto, lo descargamos, accedemos a la carpeta donde se descargó y escribimos:
+```
+chmod 400 nombredelkey.pem
+```
+- 10.Ahora solo queda abrir nuestro terminal y escribir el comando que la pagina proporciona para conectarnos.
+- 11.Ahora ponemos nuestra direccion IP en el navegador y probamos a accerder.

@@ -1,0 +1,155 @@
+---
+layout: post
+title: 'Practica 6'
+date: 2019-01-11 12:10:00 +0000
+categories: practicas
+---
+# Practica6
+
+## Paso1:
+
+Creamos una carpeta para nuestra practica6, y abrimos la consola, nos metemos dentro de dicha carpeta y escribimos:
+
+```
+vagrant init
+```
+
+Se nos crea el archivo vagrantfile.
+
+Lo abrimos y colocamos lo siguiente:
+
+```
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+    # Load Balancer
+    config.vm.define "balancer" do |app|
+      app.vm.hostname = "balanacer"
+      app.vm.network "private_network", ip: "192.168.33.10"
+      app.vm.provision "shell", path: "provision/provision-for-balancer.sh"
+    end   
+    # Apache HTTP Server
+    config.vm.define "web1" do |app|
+      app.vm.hostname = "web1"
+      app.vm.network "private_network", ip: "192.168.33.11"
+      app.vm.provision "shell", path: "provision/provision-for-apache.sh"
+    end
+    # Apache HTTP Server 2
+      config.vm.define "web2" do |app|
+        app.vm.hostname = "web2"
+        app.vm.network "private_network", ip: "192.168.33.12"
+        app.vm.provision "shell", path: "provision/provision-for-apache.sh"
+      end
+    # MySQL Server
+    config.vm.define "db" do |app|
+      app.vm.hostname = "db"
+      app.vm.network "private_network", ip: "192.168.33.13"
+      app.vm.provision "shell", path: "provision/provision-for-mysql.sh"
+    end
+
+end
+```
+
+## Paso2:
+Ahora creamos 2 carpetas, 1 que se llame config y otra que se llame provision.
+
+Dentro de provision creamos 3 scripts:
+
+```
+provision-for-apache.sh
+provision-for-mysql.sh
+provision-for-balancer.sh
+```
+Dentro de provision-for-apache.sh escribimos:
+
+```
+#!/bin/bash
+apt-get update
+apt-get install -y apache2
+apt-get install -y php libapache2-mod-php php-mysql
+sudo /etc/init.d/apache2 restart
+apt-get install -y git
+cd /tmp
+rm -rf iaw-practica-lamp
+git clone https://github.com/josejuansanchez/iaw-practica-lamp.git
+cp /tmp/iaw-practica-lamp/src/. /var/www/html -R
+sed -i 's/localhost/192.168.33.13/' /var/www/html/config.php 
+chown www-data:www-data * -R
+rm /var/www/html/index.html 
+
+```
+Dentro de provision-for-mysql.sh escribimos:
+
+```
+#!/bin/bash
+apt-get update
+apt-get install -y debconf-utils
+DB_ROOT_PASSWD=123456
+debconf-set-selections <<< "mysql-server mysql-server/root_password password $DB_ROOT_PASSWD"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $DB_ROOT_PASSWD"
+apt-get install -y mysql-server
+sed -i 's/127.0.0.1/0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
+/etc/init.d/mysql restart
+apt-get install -y git
+cd /tmp
+rm -rf iaw-practica-lamp
+git clone https://github.com/josejuansanchez/iaw-practica-lamp.git
+mysql -u root -p$DB_ROOT_PASSWD < /tmp/iaw-practica-lamp/db/database.sql 
+
+```
+Dentro de provision-for-balancer.sh escribimos:
+
+```
+#!/bin/bash
+apt-get update
+apt-get install -y apache2
+apt-get install -y php libapache2-mod-php php-mysql
+a2enmod proxy deflate
+a2enmod proxy_http deflate
+a2enmod proxy_ajp deflate
+a2enmod rewrite deflate
+a2enmod deflate deflate
+a2enmod headers deflate
+a2enmod proxy_balancer deflate
+a2enmod proxy_connect deflate
+a2enmod proxy_html deflate
+a2enmod lbmethod_byrequests deflate
+rm -f /etc/apache2/sites-enabled/000-default.conf
+sudo cp /vagrant/config/000-default.conf /etc/apache2/sites-enabled 
+sudo /etc/init.d/apache2 restart
+
+```
+## Paso3:
+Ahora procedemos a arrancar las maquinas escribiendo:
+```
+vagrant up
+```
+## Paso4:
+Ahora haremos vagrant ssh web1/2
+y en ellas editamos el siguiente archivo:
+```
+nano /var/www/html/access.php
+```
+Y en title que pondra: HomePage
+lo cambiamos por Web1 y Web2 en cada maquina respectiva a su nombre.
+
+## Paso5:
+En la maquina balancer(vagrant ssh balancer) nos vamos al archivo: 000-default.conf
+y escribimos lo siguiente:
+```
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+    <Proxy balancer://mycluster>
+        # Server 1
+        BalancerMember http://192.168.33.11
+        # Server 2
+        BalancerMember http://192.168.33.12
+    </Proxy>
+    ProxyPass / balancer://mycluster/
+</VirtualHost>
+```

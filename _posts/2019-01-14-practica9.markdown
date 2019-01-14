@@ -1,0 +1,241 @@
+---
+layout: post
+title: 'Practica 9'
+date: 2019-01-11 12:10:00 +0000
+categories: practicas
+---
+# Practica9
+- Instalamos WPSCAN con los siguientes comandos:
+```
+apt-get update
+apt-get install -y git
+apt-get install -y ruby-bundler
+apt-get install -y build-essential patch ruby-dev zlib1g-dev liblzma-dev
+gem install nokogiri
+cd /vagrant
+git clone https://github.com/wpscanteam/wpscan --depth 1
+cd wpscan/
+bundle install && rake install
+```
+- Para iniciar la auditoria de la pagina que deseemos ponemos lo siguiente dentro de /wpscan/bin
+```
+./wpscan --url + link para escanear el sitio web
+```
+Tras esto nos saldra informacion sobre la pagina que hemos escaneado mostrando la informacion
+relacionada con el sitio web (plugins, temas, vulnerabilidades…) .
+vagrant@ubuntu-bionic:/vagrant/wpscan/bin$ ./wpscan --url egosportcenter.com
+_______________________________________________________________
+        __          _______   _____
+        \ \        / /  __ \ / ____|
+         \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+          \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+           \  /\  /  | |     ____) | (__| (_| | | | |
+            \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+        WordPress Security Scanner by the WPScan Team
+                       Version 3.4.0
+          Sponsored by Sucuri - https://sucuri.net
+      @_WPScan_, @ethicalhack3r, @erwan_lr, @_FireFart_
+_______________________________________________________________
+
+[+] URL: http://egosportcenter.com/
+[+] Started: Fri Dec 14 08:05:10 2018
+
+Interesting Finding(s):
+
+[+] http://egosportcenter.com/
+ | Interesting Entries:
+ |  - Server: Apache
+ |  - X-Powered-By: PleskLin
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[+] http://egosportcenter.com/robots.txt
+ | Interesting Entries:
+ |  - /wp-admin/
+ |  - /wp-admin/admin-ajax.php
+ | Found By: Robots Txt (Aggressive Detection)
+ | Confidence: 100%
+
+[+] http://egosportcenter.com/xmlrpc.php
+ | Found By: Link Tag (Passive Detection)
+ | Confidence: 100%
+ | Confirmed By: Direct Access (Aggressive Detection), 100% confidence
+ | References:
+ |  - http://codex.wordpress.org/XML-RPC_Pingback_API
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_ghost_scanner
+ |  - https://www.rapid7.com/db/modules/auxiliary/dos/http/wordpress_xmlrpc_dos
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_xmlrpc_login
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_pingback_access
+
+[+] http://egosportcenter.com/readme.html
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+
+[+] WordPress version 4.9.9 identified (Latest, released on 2018-12-13).
+ | Detected By: Rss Generator (Passive Detection)
+ |  - http://egosportcenter.com/feed/, <generator>https://wordpress.org/?v=4.9.9</generator>
+ |  - http://egosportcenter.com/comments/feed/, <generator>https://wordpress.org/?v=4.9.9</generator>
+
+[+] WordPress theme in use: fitpress
+ | Location: http://egosportcenter.com/wp-content/themes/fitpress/
+ | Readme: http://egosportcenter.com/wp-content/themes/fitpress/readme.txt
+ | Style URL: http://egosportcenter.com/wp-content/themes/fitpress/style.css?ver=1.0.0
+ | Style Name: Fitpress
+ | Style URI: http://www.templatemonster.com/wordpress-themes.php
+ | Description: Fitpress - truely multipurpose WordPress theme for real life projects. Built with love and care by T...
+ | Author: Template Monster
+ | Author URI: http://www.templatemonster.com/
+ |
+ | Detected By: Css Style (Passive Detection)
+ |
+ | Version: 1.0.0 (80% confidence)
+ | Detected By: Style (Passive Detection)
+ |  - http://egosportcenter.com/wp-content/themes/fitpress/style.css?ver=1.0.0, Match: 'Version: 1.0.0'
+
+[+] Enumerating All Plugins
+[+] Checking Plugin Versions
+
+[i] Plugin(s) Identified:
+
+[+] cherry-search
+ | Location: http://egosportcenter.com/wp-content/plugins/cherry-search/
+ | Last Updated: 2018-02-12T14:17:00.000Z
+ | [!] The version is out of date, the latest version is 1.1.4.1
+ |
+ | Detected By: Urls In Homepage (Passive Detection)
+ |
+ | Version: 1.1.4 (100% confidence)
+ | Detected By: Readme - Stable Tag (Aggressive Detection)
+ |  - http://egosportcenter.com/wp-content/plugins/cherry-search/readme.txt
+ | Confirmed By: Readme - ChangeLog Section (Aggressive Detection)
+ |  - http://egosportcenter.com/wp-content/plugins/cherry-search/readme.txt
+
+[+] cherry-team-members
+ | Location: http://egosportcenter.com/wp-content/plugins/cherry-team-members/
+ | Latest Version: 1.4.5 (up to date)
+ | Last Updated: 2017-12-28T10:13:00.000Z
+ |
+ | Detected By: Urls In Homepage (Passive Detection)
+ |
+ | Version: 1.4.5 (80% confidence)
+ | Detected By: Readme - Stable Tag (Aggressive Detection)
+ |  - http://egosportcenter.com/wp-content/plugins/cherry-team-members/readme.txt
+
+[+] cherry-testi
+ | Location: http://egosportcenter.com/wp-content/plugins/cherry-testi/
+ | Last Updated: 2018-09-04T10:12:00.000Z
+ | [!] The version is out of date, the latest version is 1.1.2
+ |
+ | Detected By: Urls In Homepage (Passive Detection)
+ |
+ | Version: 1.1.0.5 (90% confidence)
+ | Detected By: Query Parameter (Passive Detection)
+ |  - http://egosportcenter.com/wp-content/plugins/cherry-testi/public/assets/css/style.css?ver=1.1.0.5
+ | Confirmed By: Readme - Stable Tag (Aggressive Detection)
+ |  - http://egosportcenter.com/wp-content/plugins/cherry-testi/readme.txt
+
+[+] contact-form-7
+ | Location: http://egosportcenter.com/wp-content/plugins/contact-form-7/
+ | Last Updated: 2018-12-11T11:59:00.000Z
+ | [!] The version is out of date, the latest version is 5.1
+ |
+ | Detected By: Urls In Homepage (Passive Detection)
+ |
+ | [!] 1 vulnerability identified:
+ |
+ | [!] Title: Contact Form 7 <= 5.0.3 - register_post_type() Privilege Escalation
+ |     Fixed in: 5.0.4
+ |     References:
+ |      - https://wpvulndb.com/vulnerabilities/9127
+ |      - https://contactform7.com/2018/09/04/contact-form-7-504/
+ |      - https://plugins.trac.wordpress.org/changeset/1935726/contact-form-7
+ |      - https://plugins.trac.wordpress.org/changeset/1934594/contact-form-7
+ |      - https://plugins.trac.wordpress.org/changeset/1934343/contact-form-7
+ |      - https://plugins.trac.wordpress.org/changeset/1934327/contact-form-7
+ |
+ | Version: 5.0.3 (100% confidence)
+ | Detected By: Query Parameter (Passive Detection)
+ |  - http://egosportcenter.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=5.0.3
+ |  - http://egosportcenter.com/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=5.0.3
+ | Confirmed By:
+ |  Readme - Stable Tag (Aggressive Detection)
+ |   - http://egosportcenter.com/wp-content/plugins/contact-form-7/readme.txt
+ |  Readme - ChangeLog Section (Aggressive Detection)
+ |   - http://egosportcenter.com/wp-content/plugins/contact-form-7/readme.txt
+
+[+] forget-about-shortcode-buttons
+ | Location: http://egosportcenter.com/wp-content/plugins/forget-about-shortcode-buttons/
+ | Latest Version: 2.1.2 (up to date)
+ | Last Updated: 2018-09-28T13:05:00.000Z
+ |
+ | Detected By: Urls In Homepage (Passive Detection)
+ |
+ | Version: 2.1.2 (100% confidence)
+ | Detected By: Query Parameter (Passive Detection)
+ |  - http://egosportcenter.com/wp-content/plugins/forget-about-shortcode-buttons/public/css/button-styles.css?ver=2.1.2
+ | Confirmed By:
+ |  Readme - Stable Tag (Aggressive Detection)
+ |   - http://egosportcenter.com/wp-content/plugins/forget-about-shortcode-buttons/readme.txt
+ |  Readme - ChangeLog Section (Aggressive Detection)
+ |   - http://egosportcenter.com/wp-content/plugins/forget-about-shortcode-buttons/readme.txt
+
+[+] moto-tools-integration
+ | Location: http://egosportcenter.com/wp-content/plugins/moto-tools-integration/
+ |
+ | Detected By: Urls In Homepage (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] motopress-content-editor
+ | Location: http://egosportcenter.com/wp-content/plugins/motopress-content-editor/
+ |
+ | Detected By: Urls In Homepage (Passive Detection)
+ |
+ | Version: 2.4.0 (50% confidence)
+ | Detected By: Readme - ChangeLog Section (Aggressive Detection)
+ |  - http://egosportcenter.com/wp-content/plugins/motopress-content-editor/readme.txt
+
+[+] mp-timetable
+ | Location: http://egosportcenter.com/wp-content/plugins/mp-timetable/
+ | Last Updated: 2018-10-04T15:33:00.000Z
+ | [!] The version is out of date, the latest version is 2.2.1
+ |
+ | Detected By: Urls In Homepage (Passive Detection)
+ |
+ | Version: 2.1.10 (60% confidence)
+ | Detected By: Query Parameter (Passive Detection)
+ |  - http://egosportcenter.com/wp-content/plugins/mp-timetable/media/css/style.css?ver=2.1.10
+ | Confirmed By: Readme - ChangeLog Section (Aggressive Detection)
+ |  - http://egosportcenter.com/wp-content/plugins/mp-timetable/readme.txt
+
+[+] power-builder
+ | Location: http://egosportcenter.com/wp-content/plugins/power-builder/
+ |
+ | Detected By: Urls In Homepage (Passive Detection)
+ |
+ | The version could not be determined.
+
+[+] uk-cookie-consent
+ | Location: http://egosportcenter.com/wp-content/plugins/uk-cookie-consent/
+ | Latest Version: 2.3.11 (up to date)
+ | Last Updated: 2018-06-29T09:12:00.000Z
+ |
+ | Detected By: Urls In Homepage (Passive Detection)
+ |
+ | Version: 2.3.11 (80% confidence)
+ | Detected By: Readme - Stable Tag (Aggressive Detection)
+ |  - http://egosportcenter.com/wp-content/plugins/uk-cookie-consent/readme.txt
+
+[+] Enumerating Config Backups
+ Checking Config Backups - Time: 00:00:12 <===> (21 / 21) 100.00% Time: 00:00:12
+
+[i] No Config Backups Found.
+
+[+] Finished: Fri Dec 14 08:06:05 2018
+[+] Requests Done: 69
+[+] Cached Requests: 5
+[+] Data Sent: 16.535 KB
+[+] Data Received: 5.318 MB
+[+] Memory used: 70.156 MB
+[+] Elapsed time: 00:00:54
