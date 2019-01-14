@@ -26,8 +26,7 @@ bundle install && rake install
 ./wpscan --url + link para escanear el sitio web
 ```
 
-Tras esto nos saldra informacion sobre la pagina que hemos escaneado mostrando la informacion
-relacionada con el sitio web (plugins, temas, vulnerabilidades…) .
+- Tras esto nos saldra informacion sobre la pagina que hemos escaneado mostrando la informacion relacionada con el sitio web (plugins, temas, vulnerabilidades…).
 
 ```
 vagrant@ubuntu-bionic:/vagrant/wpscan/bin$ ./wpscan --url egosportcenter.com
