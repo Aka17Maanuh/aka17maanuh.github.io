@@ -1,6 +1,6 @@
 ---
 layout: page
-title: development
+title: Development
 permalink: /development/
 ---
 
