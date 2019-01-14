@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Practicas
-permalink: /practicas/
+title: Operations
+permalink: /operations/
 ---
 prueba
   <ul class="post-list">
