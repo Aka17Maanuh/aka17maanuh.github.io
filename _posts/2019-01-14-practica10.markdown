@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Practica 10'
-date: 2019-01-11 12:10:00 +0000
+date: 2019-01-11 12:17:00 +0000
 categories: practicas
 ---
 # Practica 10

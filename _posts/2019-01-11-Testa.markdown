@@ -1,7 +1,0 @@
----
-layout: post
-title: 'Prueba Ejemplo'
-date: 2019-01-11 11:18:53 +0000
-categories: practicas
----
-esto es un post de prueba :v
