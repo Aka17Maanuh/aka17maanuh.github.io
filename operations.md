@@ -3,7 +3,9 @@ layout: page
 title: Operations
 permalink: /operations/
 ---
-prueba
+
+# Seccion de Practicas.
+
   <ul class="post-list">
     {% for post in site.categories.practicas %}
       <li>
