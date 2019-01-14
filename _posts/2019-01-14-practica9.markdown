@@ -5,7 +5,9 @@ date: 2019-01-11 12:10:00 +0000
 categories: practicas
 ---
 # Practica9
+
 - Instalamos WPSCAN con los siguientes comandos:
+
 ```
 apt-get update
 apt-get install -y git
@@ -17,12 +19,17 @@ git clone https://github.com/wpscanteam/wpscan --depth 1
 cd wpscan/
 bundle install && rake install
 ```
+
 - Para iniciar la auditoria de la pagina que deseemos ponemos lo siguiente dentro de /wpscan/bin
+
 ```
 ./wpscan --url + link para escanear el sitio web
 ```
+
 Tras esto nos saldra informacion sobre la pagina que hemos escaneado mostrando la informacion
 relacionada con el sitio web (plugins, temas, vulnerabilidades…) .
+
+```
 vagrant@ubuntu-bionic:/vagrant/wpscan/bin$ ./wpscan --url egosportcenter.com
 _______________________________________________________________
         __          _______   _____
@@ -239,3 +246,4 @@ Interesting Finding(s):
 [+] Data Received: 5.318 MB
 [+] Memory used: 70.156 MB
 [+] Elapsed time: 00:00:54
+```
